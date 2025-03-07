@@ -10,11 +10,24 @@ function App() {
     initialLayout[key] = true;
   });
 
-  const [company, setCompany] = useState("Company");
-  const [jobTitle, setJobTitle] = useState("Front End Engineer");
-  const [hiringManager, setHiringManager] = useState("Hiring Manager");
-  const [applicantName, setApplicantName] = useState("John McPherson");
+  const [vars, setVars] = useState({
+    company: "Company",
+    jobTitle: "Front End Engineer",
+    hiringManager: "Hiring Manager",
+    applicantName: "John McPherson",
+  });
+
   const [layout, setLayout] = useState(initialLayout);
+
+  const handleChange = (newValue: string, key: string) => {
+    setVars((prevState) => {
+      const newState = {
+        ...prevState,
+        [key]: newValue,
+      };
+      return newState;
+    });
+  };
 
   const handleCheck = (key: string) => {
     setLayout((prevState) => {
@@ -33,30 +46,17 @@ function App() {
         className="flex justify-between w-10/12 max-w-4xl gap-3"
       >
         <div className="flex flex-col gap-3">
-          <Input
-            name={"company"}
-            label="Company"
-            value={company}
-            onChange={(newValue) => setCompany(newValue)}
-          />
-          <Input
-            name={"jobTitle"}
-            label="Job Title"
-            value={jobTitle}
-            onChange={(newValue) => setJobTitle(newValue)}
-          />
-          <Input
-            name={"hiringManager"}
-            label="Hiring Manager"
-            value={hiringManager}
-            onChange={(newValue) => setHiringManager(newValue)}
-          />
-          <Input
-            name={"Applicant Name"}
-            label="Applicant Name"
-            value={applicantName}
-            onChange={(newValue) => setApplicantName(newValue)}
-          />
+          {Object.keys(vars).map((key: string, index) => {
+            return (
+              <Input
+                key={index}
+                name={key}
+                label={key}
+                value={vars[key as keyof typeof vars]}
+                onChange={(newValue) => handleChange(newValue, key)}
+              />
+            );
+          })}
         </div>
         <div className="flex gap-3 flex-wrap items-start">
           {Object.keys(layout).map((key: string, index) => {
@@ -74,52 +74,22 @@ function App() {
       </section>
 
       <section id="output" className="flex flex-col w-10/12 max-w-4xl gap-3">
-        {layout.intro &&
-          appData.intro.map((content, index) => (
-            <EditableText
-              key={`intro-${index}`}
-              text={content}
-              jobTitle={jobTitle}
-              company={company}
-              hiringManager={hiringManager}
-              applicantName={applicantName}
-            />
-          ))}
-        {layout.mainContent &&
-          appData.mainContent.map((content, index) => (
-            <EditableText
-              key={`maincontent-${index}`}
-              text={content}
-              jobTitle={jobTitle}
-              company={company}
-              hiringManager={hiringManager}
-              applicantName={applicantName}
-            />
-          ))}
-
-        {layout.outro &&
-          appData.outro.map((content, index) => (
-            <EditableText
-              key={`outro-${index}`}
-              text={content}
-              jobTitle={jobTitle}
-              company={company}
-              hiringManager={hiringManager}
-              applicantName={applicantName}
-            />
-          ))}
-
-        {layout.signOff &&
-          appData.signOff.map((content, index) => (
-            <EditableText
-              key={`signoff-${index}`}
-              text={content}
-              jobTitle={jobTitle}
-              company={company}
-              hiringManager={hiringManager}
-              applicantName={applicantName}
-            />
-          ))}
+        {Object.keys(layout).map((section) => {
+          return layout[section]
+            ? appData[section as keyof typeof appData].map(
+                (content: string, index: number) => (
+                  <EditableText
+                    key={`intro-${index}`}
+                    text={content}
+                    jobTitle={vars.jobTitle}
+                    company={vars.company}
+                    hiringManager={vars.hiringManager}
+                    applicantName={vars.applicantName}
+                  />
+                )
+              )
+            : "";
+        })}
       </section>
     </main>
   );
