@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
-  text: string;
   company: string;
   jobTitle: string;
   applicantName: string;
@@ -15,7 +14,6 @@ interface Props {
 const classes = `w-full `;
 
 const EditableText = ({
-  text,
   company,
   jobTitle,
   applicantName,
