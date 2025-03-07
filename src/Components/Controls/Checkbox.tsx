@@ -16,9 +16,10 @@ const Checkbox = ({
       </label>
       <input
         type="checkbox"
+        spellCheck={true}
         name={name}
         checked={value}
-        className="bg-amber-200 p-1"
+        className="bg-amber-200 p-1 accent-amber-400 rounded "
         onChange={() => onChange()}
       />
     </div>

@@ -41,7 +41,7 @@ function App() {
       const blob = new Blob([flattenContent()], { type: "text/html" });
       const data = [new ClipboardItem({ "text/html": blob })];
       await navigator.clipboard.write(data);
-      alert("Text copied as separate paragraphs!");
+      alert("Text copied to clipboard");
     } catch (err) {
       console.error("Error copying:", err);
     }
