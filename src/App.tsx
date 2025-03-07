@@ -4,6 +4,9 @@ import appData from "./data/data";
 import EditableText from "./Components/EditableText/EditableText";
 import Input from "./Components/Controls/Input";
 import Checkbox from "./Components/Controls/checkbox";
+
+import { Document, Packer, Paragraph, TextRun } from "docx";
+
 function App() {
   const initialLayout: { [key: string]: boolean } = {};
   const initialContent: { [key: string]: string[] } = {};
@@ -22,9 +25,8 @@ function App() {
   const [layout, setLayout] = useState(initialLayout);
   const [content, setContent] = useState(initialContent);
 
-  const copyToClipboard = async () => {
-    console.log(Object.values(content).flat());
-    const text = Object.values(content)
+  const flattenContent = () => {
+    return Object.values(content)
       .flat()
       .map((text) => `<p>${text}</p>`)
       .join("\n")
@@ -32,15 +34,68 @@ function App() {
       .replace("{{hiringManager}}", vars.hiringManager)
       .replace("{{applicantName}}", vars.applicantName)
       .replace("{{jobTitle}}", vars.jobTitle);
+  };
 
+  const copyToClipboard = async () => {
     try {
-      const blob = new Blob([text], { type: "text/html" });
+      const blob = new Blob([flattenContent()], { type: "text/html" });
       const data = [new ClipboardItem({ "text/html": blob })];
       await navigator.clipboard.write(data);
       alert("Text copied as separate paragraphs!");
     } catch (err) {
       console.error("Error copying:", err);
     }
+  };
+
+  const saveAsWordDoc = () => {
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: Object.values(content)
+            .flat()
+            .map((item) => {
+              const content = item
+                .replace("{{company}}", vars.company)
+                .replace("{{hiringManager}}", vars.hiringManager)
+                .replace("{{applicantName}}", vars.applicantName)
+                .replace("{{jobTitle}}", vars.jobTitle);
+
+              return new Paragraph({
+                spacing: {
+                  before: 0, // No space before the paragraph
+                  after: 240, // Space after the paragraph
+                  line: 240, // Double line spacing (480 twips = double spacing)
+                  lineRule: "auto", // This is important for the line spacing to take effect
+                },
+                children: [
+                  new TextRun({
+                    text: content,
+                    font: {
+                      name: "Calibri", // Font family: Calibri
+                    },
+                    size: 24, // Font size: 10pt (docx library uses half-points, so 20 equals 10pt)
+                  }),
+
+                  new TextRun({
+                    text: "\n",
+                  }),
+                ],
+              });
+            }),
+        },
+      ],
+    });
+    Packer.toBlob(doc).then((blob) => {
+      // Create a link to download the Word file
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${vars.applicantName.replace(
+        " ",
+        "_"
+      )}_coverletter_${vars.company.replace(" ", "_")}.docx`;
+      link.click();
+    });
   };
 
   const handleContentUpdate = (
@@ -138,7 +193,10 @@ function App() {
         >
           Copy To Clipboard
         </button>
-        <button className="bg-amber-200 p-3 rounded hover:bg-amber-400">
+        <button
+          className="bg-amber-200 p-3 rounded hover:bg-amber-400"
+          onClick={() => saveAsWordDoc()}
+        >
           Download
         </button>
       </section>
