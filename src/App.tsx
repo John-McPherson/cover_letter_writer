@@ -22,21 +22,25 @@ function App() {
   const [layout, setLayout] = useState(initialLayout);
   const [content, setContent] = useState(initialContent);
 
-  console.log(content);
-
   const copyToClipboard = async () => {
-    // const textContent = document
-    //   .querySelectorAll(".textContent")
-    //   .map((text) => text.innerText);
-    // console.log(textContent);
-    // try {
-    //   const blob = new Blob([text], { type: "text/html" });
-    //   const data = [new ClipboardItem({ "text/html": blob })];
-    //   await navigator.clipboard.write(data);
-    //   alert("Text copied as separate paragraphs!");
-    // } catch (err) {
-    //   console.error("Error copying:", err);
-    // }
+    console.log(Object.values(content).flat());
+    const text = Object.values(content)
+      .flat()
+      .map((text) => `<p>${text}</p>`)
+      .join("\n")
+      .replace("{{company}}", vars.company)
+      .replace("{{hiringManager}}", vars.hiringManager)
+      .replace("{{applicantName}}", vars.applicantName)
+      .replace("{{jobTitle}}", vars.jobTitle);
+
+    try {
+      const blob = new Blob([text], { type: "text/html" });
+      const data = [new ClipboardItem({ "text/html": blob })];
+      await navigator.clipboard.write(data);
+      alert("Text copied as separate paragraphs!");
+    } catch (err) {
+      console.error("Error copying:", err);
+    }
   };
 
   const handleContentUpdate = (
