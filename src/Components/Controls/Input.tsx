@@ -1,13 +1,15 @@
-const TextInput = ({
+const Input = ({
   onChange,
   name,
   label,
   value,
+  type = "text",
 }: {
   onChange: (value: string) => void;
   name: string;
   label: string;
-  value: string;
+  value?: string;
+  type?: string;
 }) => {
   return (
     <div className="flex gap-3 items-center justify-between">
@@ -15,7 +17,7 @@ const TextInput = ({
         <b>{label}:</b>
       </label>
       <input
-        type="text"
+        type={type}
         name={name}
         defaultValue={value}
         className="bg-amber-200 p-1"
@@ -25,4 +27,4 @@ const TextInput = ({
   );
 };
 
-export default TextInput;
+export default Input;

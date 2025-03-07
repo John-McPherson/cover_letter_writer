@@ -1,5 +1,6 @@
 const appData = {
   intro: [
+    "Dear {{hiringManager}}",
     "Thank you for considering me for the role of {{jobTitle}} at {{company}}. I am a web developer with 3 years of experience with JavaScript, TypeScript, CSS, and PHP. I am passionate about learning, and improve my skills and I am confident about my ability to quickly upskill to match any business needs. I thrive in roles that challenge me,  I don’t want a role where I know how to do everything. I want to be constantly learning.",
   ],
   mainContent: [
@@ -9,6 +10,6 @@ const appData = {
   outro: [
     "Outside of my technical skills I am currently a member of the DE&I team at my work and have been involved in multiple events and indicatives throughout the year. And In my current role, I am often the first point of contact for non-technical colleagues despite the fact that I am one of the more junior developers. I believe this is due to my participation in work events, and my friendly demeaner.",
   ],
-  signOff: ["Thank you for considering my application.", "John McPherson"],
+  signOff: ["Thank you for considering my application.", "{{applicantName}}"],
 };
 export default appData;

@@ -6,11 +6,19 @@ interface Props {
   text: string;
   company: string;
   jobTitle: string;
+  applicantName: string;
+  hiringManager: string;
 }
 
 const classes = `w-full `;
 
-const EditableText = ({ text, company, jobTitle }: Props) => {
+const EditableText = ({
+  text,
+  company,
+  jobTitle,
+  applicantName,
+  hiringManager,
+}: Props) => {
   const [content, setContent] = useState(text);
   const [isEditing, setIsEditing] = useState(false);
   return (
@@ -19,6 +27,8 @@ const EditableText = ({ text, company, jobTitle }: Props) => {
         <p className={classes}>
           {content
             .replace("{{company}}", company)
+            .replace("{{hiringManager}}", hiringManager)
+            .replace("{{applicantName}}", applicantName)
             .replace("{{jobTitle}}", jobTitle)}
         </p>
       ) : (
