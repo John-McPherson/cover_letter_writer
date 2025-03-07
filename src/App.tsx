@@ -5,6 +5,9 @@ import EditableText from "./Components/EditableText/EditableText";
 import Input from "./Components/Controls/Input";
 import Checkbox from "./Components/Controls/checkbox";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy, faDownload } from "@fortawesome/free-solid-svg-icons";
+
 import { Document, Packer, Paragraph, TextRun } from "docx";
 
 function App() {
@@ -188,16 +191,18 @@ function App() {
       </section>
       <section id="save" className="flex gap-5">
         <button
-          className="bg-amber-200 p-3 rounded hover:bg-amber-400"
+          className="bg-amber-200 p-3 rounded hover:bg-amber-400 "
           onClick={() => copyToClipboard()}
         >
-          Copy To Clipboard
+          <b>Copy To Clipboard</b>&nbsp;&nbsp;
+          <FontAwesomeIcon icon={faCopy} />
         </button>
         <button
           className="bg-amber-200 p-3 rounded hover:bg-amber-400"
           onClick={() => saveAsWordDoc()}
         >
-          Download
+          <b>Download</b>&nbsp;&nbsp;
+          <FontAwesomeIcon icon={faDownload} />
         </button>
       </section>
     </main>
