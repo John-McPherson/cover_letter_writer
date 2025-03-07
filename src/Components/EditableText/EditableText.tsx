@@ -8,6 +8,8 @@ interface Props {
   jobTitle: string;
   applicantName: string;
   hiringManager: string;
+  content: string;
+  handleChange: (value: string) => void;
 }
 
 const classes = `w-full `;
@@ -18,13 +20,15 @@ const EditableText = ({
   jobTitle,
   applicantName,
   hiringManager,
+  content,
+  handleChange,
 }: Props) => {
-  const [content, setContent] = useState(text);
+  // const [content, setContent] = useState(text);
   const [isEditing, setIsEditing] = useState(false);
   return (
     <div className="flex gap-4">
       {!isEditing ? (
-        <p className={classes}>
+        <p className={`${classes} textContent`}>
           {content
             .replace("{{company}}", company)
             .replace("{{hiringManager}}", hiringManager)
@@ -34,7 +38,7 @@ const EditableText = ({
       ) : (
         <textarea
           className={`${classes} resize-none field-sizing-content`}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
         >
           {content}
         </textarea>
